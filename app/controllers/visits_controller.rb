@@ -31,13 +31,12 @@ class VisitsController < ApplicationController
       if person.mtype == 0 # Normal
         rg = 0
       elsif person.mtype == 1 # Residente
-        rg = 1
+        rg = 2
       elsif person.mtype == 2 # Host
-        rg = 3
+        rg = 4
       else
         rg = 0
       end
-
 
       @visit = Visit.new(person_id: person.id, event_id: event.id, remaining_guest: rg)
 
