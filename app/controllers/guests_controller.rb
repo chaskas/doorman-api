@@ -45,7 +45,14 @@ class GuestsController < ApplicationController
   # POST /guests
   def create_by_rut
 
-    person = Person.find_by! rut: params[:rut]
+    person = 0
+
+    if Person.exists?(rut: params[:rut])
+      person = Person.find_by! rut: params[:rut]
+    else
+      person = Person.new(rut: params[:rut])
+      person.save
+    end
 
     event = Event.find_by! id: params[:id]
 
