@@ -22,6 +22,8 @@ class VisitsController < ApplicationController
       end
 
       if @visit.save
+        event.attendees += 1
+        event.save
         render json: @visit, status: :ok, location: @visit
       else
         render json: @visit.errors, status: :unprocessable_entity
