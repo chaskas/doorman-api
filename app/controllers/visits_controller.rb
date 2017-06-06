@@ -5,6 +5,9 @@ class VisitsController < ApplicationController
 
     person = Person.find_by! rut: params[:rut]
 
+    person.last_seen = Time.now
+    person.save
+
     event = Event.where("starts < :now AND ends > :now", { now: Time.now }).take!
 
     if Visit.exists?(person_id: person.id, event_id: event.id)
@@ -41,6 +44,9 @@ class VisitsController < ApplicationController
       @visit = Visit.new(person_id: person.id, event_id: event.id, remaining_guest: rg)
 
       if @visit.save
+
+        event.attendees += 1
+        event.save
         render json: @visit, status: :created, location: @visit
       else
         render json: @visit.errors, status: :unprocessable_entity

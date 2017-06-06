@@ -5,6 +5,9 @@ class GuestsController < ApplicationController
 
     person = Person.find_by! rut: params[:rut]
 
+    person.last_seen = Time.now
+    person.save
+
     event = Event.where("starts < :now AND ends > :now", { now: Time.now }).take!
 
     if Guest.exists?(person_id: person.id, event_id: event.id)
@@ -20,6 +23,10 @@ class GuestsController < ApplicationController
         @visit = Visit.new(person_id: person.id, event_id: event.id)
 
         if @visit.save
+
+          event.attendees += 1
+          event.save
+
           render json: @visit, status: :created, location: @visit
         else
           render json: @visit.errors, status: :unprocessable_entity
@@ -43,26 +50,61 @@ class GuestsController < ApplicationController
   end
 
   # POST /guests
-  def create_by_rut
+  def create_by_ruts
 
-    person = 0
-
-    if Person.exists?(rut: params[:rut])
-      person = Person.find_by! rut: params[:rut]
-    else
-      person = Person.new(rut: params[:rut])
-      person.save
-    end
-
+    ruts = params[:ruts]
     event = Event.find_by! id: params[:id]
 
-    @guest = Guest.new(person_id: person.id, event_id: event.id)
+    success = false
 
-    if @guest.save
-      render json: @guest, status: :created, location: @guest
-    else
-      render json: @guest.errors, status: :unprocessable_entity
+    status = :ok
+
+    guests = Array.new
+
+    ruts.each do |rut|
+
+      person = 0
+
+      if rut.dup.to_s.insert(-2, '-').rut_valid?
+
+        if Person.exists?(rut: rut)
+          person = Person.find_by! rut: rut
+        else
+          person = Person.new(rut: rut)
+          person.mtype = 0
+          person.save
+        end
+
+        if Guest.exists?(person_id: person.id, event_id: event.id)
+          success = true
+          status = :accepted
+        else
+          @guest = Guest.new(person_id: person.id, event_id: event.id)
+          if @guest.save
+            success = true
+            event.guests += 1
+            event.save
+            status = :created
+          else
+            success = false
+            status = :unprocessable_entity
+          end
+        end
+
+      else
+        guests.push(rut.dup.to_s.insert(-2, '-'))
+        success = true
+        status = :partial_content
+      end
+
     end
+
+    if success
+      render json: guests.to_json, status: status
+    else
+      render status: status
+    end
+
   end
 
 

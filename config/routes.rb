@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   get '/visit', to: 'visits#do_visit', defaults: { format: :json }
   get '/guest/in', to: 'guests#do_visit', defaults: { format: :json }
-  post '/guest/add', to: 'guests#create_by_rut', defaults: { format: :json }
+  post '/guest/add', to: 'guests#create_by_ruts', defaults: { format: :json }
 
   get '/events/month/:month', to: 'events#get_by_month', defaults: { format: :json }
 
