@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount_devise_token_auth_for 'User', at: 'auth'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   resources :people
@@ -19,5 +20,13 @@ Rails.application.routes.draw do
   get 'statistics/1/:id', to: 'statistics#get_guests_vs_attendees', defaults: { format: :json }
   get 'statistics/2/:id', to: 'statistics#get_attendees_by_type', defaults: { format: :json }
   get 'statistics/3/:id', to: 'statistics#get_attendes_by_hour', defaults: { format: :json }
+
+  # Profiles
+  get '/profile', to: 'profiles#index', defaults: { format: :json }
+  post '/profile', to: 'profiles#create', defaults: { format: :json }
+  put '/profile', to: 'profiles#update', defaults: { format: :json }
+  patch '/profile', to: 'profiles#update', defaults: { format: :json }
+  delete '/profile', to: 'profiles#destroy', defaults: { format: :json }
+  post '/profile/avatar', to: 'profiles#update_avatar', defaults: { format: :json }
 
 end
