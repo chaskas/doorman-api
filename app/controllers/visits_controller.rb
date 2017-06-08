@@ -22,7 +22,7 @@ class VisitsController < ApplicationController
       end
 
       if @visit.save
-        event.attendees += 1
+        event.total_attendees += 1
         event.save
         render json: @visit, status: :ok, location: @visit
       else
@@ -47,7 +47,7 @@ class VisitsController < ApplicationController
 
       if @visit.save
 
-        event.attendees += 1
+        event.total_attendees += 1
         event.save
         render json: @visit, status: :created, location: @visit
       else

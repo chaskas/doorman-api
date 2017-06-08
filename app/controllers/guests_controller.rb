@@ -24,7 +24,7 @@ class GuestsController < ApplicationController
 
         if @visit.save
 
-          event.attendees += 1
+          event.total_attendees += 1
           event.save
 
           render json: @visit, status: :created, location: @visit
@@ -83,7 +83,7 @@ class GuestsController < ApplicationController
           @guest = Guest.new(person_id: person.id, event_id: event.id)
           if @guest.save
             success = true
-            event.guests += 1
+            event.total_guests += 1
             event.save
             status = :created
           else
