@@ -16,4 +16,8 @@ Rails.application.routes.draw do
 
   get '/events/month/:month', to: 'events#get_by_month', defaults: { format: :json }
 
+  get 'statistics/1/:id', to: 'statistics#get_guests_vs_attendees', defaults: { format: :json }
+  get 'statistics/2/:id', to: 'statistics#get_attendees_by_type', defaults: { format: :json }
+  get 'statistics/3/:id', to: 'statistics#get_attendes_by_hour', defaults: { format: :json }
+
 end

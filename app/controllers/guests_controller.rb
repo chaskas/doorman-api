@@ -71,6 +71,7 @@ class GuestsController < ApplicationController
           person = Person.find_by! rut: rut
         else
           person = Person.new(rut: rut)
+          person.remaining_guest = 0
           person.mtype = 0
           person.save
         end
