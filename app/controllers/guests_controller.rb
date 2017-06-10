@@ -70,9 +70,7 @@ class GuestsController < ApplicationController
         if Person.exists?(rut: rut)
           person = Person.find_by! rut: rut
         else
-          person = Person.new(rut: rut)
-          person.remaining_guest = 0
-          person.mtype = 0
+          person = Person.new(rut: rut, mtype: 0)
           person.save
         end
 
