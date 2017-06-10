@@ -67,10 +67,10 @@ class GuestsController < ApplicationController
 
       if rut.dup.to_s.insert(-2, '-').rut_valid?
 
-        if Person.exists?(rut: rut)
-          person = Person.find_by! rut: rut
+        if Person.exists?(rut: rut.to_s[0..-2])
+          person = Person.find_by! rut: rut.to_s[0..-2]
         else
-          person = Person.new(rut: rut, mtype: 0)
+          person = Person.new(rut: rut.to_s[0..-2], mtype: 0)
           person.save
         end
 
