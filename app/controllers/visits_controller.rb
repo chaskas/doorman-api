@@ -36,9 +36,15 @@ class VisitsController < ApplicationController
       if person.mtype == 0 # Normal
         rg = 0
       elsif person.mtype == 1 # Residente
-        rg = 2
-      elsif person.mtype == 2 # Host
         rg = 4
+      elsif person.mtype == 2 # Host
+        rg = 5
+      elsif person.mtype == 3 # Invitado 
+        rg = 1
+      elsif person.mtype == 4 # Embajador
+        rg = 4
+      elsif person.mtype == 5 # Invitado +1
+        rg =  2
       else
         rg = 0
       end
