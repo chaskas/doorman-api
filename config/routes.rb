@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   get 'statistics/2/:id', to: 'statistics#get_attendees_by_type', defaults: { format: :json }
   get 'statistics/3/:id', to: 'statistics#get_attendes_by_hour', defaults: { format: :json }
 
+  get '/get_drink', to: 'drinks#get_drink', defaults: { format: :json }
+  
   # Profiles
   get '/profile', to: 'profiles#index', defaults: { format: :json }
   post '/profile', to: 'profiles#create', defaults: { format: :json }

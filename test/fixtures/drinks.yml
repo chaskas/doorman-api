@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  person: one
+  event: one
+  remaining: 1
+
+two:
+  person: two
+  event: two
+  remaining: 1
