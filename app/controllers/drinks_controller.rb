@@ -25,7 +25,7 @@ class DrinksController < ApplicationController
 
       rg = 0
       if person.mtype == 2 # Host
-        rg = 4
+        rg = 2
       else
         rg = 0
       end
