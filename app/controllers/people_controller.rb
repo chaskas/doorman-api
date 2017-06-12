@@ -10,21 +10,42 @@ class PeopleController < ApplicationController
 
   # GET /people/m/host
   def host
-    @people = Person.where(mtype: 2)
+    @people = Person.where(mtype: 2).order('last_seen IS NULL, last_seen DESC')
 
     render json: @people
   end
 
   # GET /people/m/residente
   def residente
-    @people = Person.where(mtype: 1)
+    @people = Person.where(mtype: 1).order('last_seen IS NULL, last_seen DESC')
+
+    render json: @people
+  end
+
+  # GET /people/m/embajador
+  def embajador
+    @people = Person.where(mtype: 4).order('last_seen IS NULL, last_seen DESC')
 
     render json: @people
   end
 
   # GET /people/m/invitado
   def invitado
-    @people = Person.where(mtype: 0)
+    @people = Person.where(mtype: 3).order('last_seen IS NULL, last_seen DESC')
+
+    render json: @people
+  end
+
+  # GET /people/m/invitado1
+  def invitado1
+    @people = Person.where(mtype: 5).order('last_seen IS NULL, last_seen DESC')
+
+    render json: @people
+  end
+
+  # GET /people/m/normal
+  def normal
+    @people = Person.where(mtype: 0).order('last_seen IS NULL, last_seen DESC')
 
     render json: @people
   end

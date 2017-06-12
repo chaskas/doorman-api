@@ -10,19 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608161427) do
+ActiveRecord::Schema.define(version: 20170612153651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "drinks", force: :cascade do |t|
+    t.integer  "person_id"
+    t.integer  "event_id"
+    t.integer  "remaining"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_drinks_on_event_id", using: :btree
+    t.index ["person_id"], name: "index_drinks_on_person_id", using: :btree
+  end
 
   create_table "events", force: :cascade do |t|
     t.string   "name"
     t.datetime "starts"
     t.datetime "ends"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "total_guests",    default: 0
-    t.integer  "total_attendees", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "guests", force: :cascade do |t|
@@ -30,6 +38,7 @@ ActiveRecord::Schema.define(version: 20170608161427) do
     t.integer  "event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["event_id", "person_id"], name: "index_guests_on_event_id_and_person_id", using: :btree
     t.index ["event_id"], name: "index_guests_on_event_id", using: :btree
     t.index ["person_id"], name: "index_guests_on_person_id", using: :btree
   end
@@ -99,10 +108,13 @@ ActiveRecord::Schema.define(version: 20170608161427) do
     t.integer  "event_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["event_id", "person_id"], name: "index_visits_on_event_id_and_person_id", using: :btree
     t.index ["event_id"], name: "index_visits_on_event_id", using: :btree
     t.index ["person_id"], name: "index_visits_on_person_id", using: :btree
   end
 
+  add_foreign_key "drinks", "events"
+  add_foreign_key "drinks", "people"
   add_foreign_key "guests", "events"
   add_foreign_key "guests", "people"
   add_foreign_key "profiles", "users"

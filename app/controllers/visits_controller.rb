@@ -22,8 +22,6 @@ class VisitsController < ApplicationController
       end
 
       if @visit.save
-        event.total_attendees += 1
-        event.save
         render json: @visit, status: :ok, location: @visit
       else
         render json: @visit.errors, status: :unprocessable_entity
@@ -39,10 +37,10 @@ class VisitsController < ApplicationController
         rg = 4
       elsif person.mtype == 2 # Host
         rg = 5
-      elsif person.mtype == 3 # Invitado 
+      elsif person.mtype == 3 # Invitado
         rg = 1
       elsif person.mtype == 4 # Embajador
-        rg = 4
+        rg = 8
       elsif person.mtype == 5 # Invitado +1
         rg =  2
       else
@@ -52,9 +50,6 @@ class VisitsController < ApplicationController
       @visit = Visit.new(person_id: person.id, event_id: event.id, remaining_guest: rg)
 
       if @visit.save
-
-        event.total_attendees += 1
-        event.save
         render json: @visit, status: :created, location: @visit
       else
         render json: @visit.errors, status: :unprocessable_entity

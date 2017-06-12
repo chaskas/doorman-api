@@ -16,18 +16,14 @@ class GuestsController < ApplicationController
 
         @visit = Visit.find_by person_id: person.id, event_id: event.id
 
-        render json: @visit, status: :not_found, location: @visit
+        render json: @visit, status: :not_found
 
       else
 
         @visit = Visit.new(person_id: person.id, event_id: event.id)
 
         if @visit.save
-
-          event.total_attendees += 1
-          event.save
-
-          render json: @visit, status: :created, location: @visit
+          render json: @visit, status: :created
         else
           render json: @visit.errors, status: :unprocessable_entity
         end
@@ -36,7 +32,7 @@ class GuestsController < ApplicationController
 
     else
 
-      render json: @guest, status: :not_found, location: @guest
+      render json: @guest, status: :not_found
 
     end
 
@@ -81,8 +77,6 @@ class GuestsController < ApplicationController
           @guest = Guest.new(person_id: person.id, event_id: event.id)
           if @guest.save
             success = true
-            event.total_guests += 1
-            event.save
             status = :created
           else
             success = false
