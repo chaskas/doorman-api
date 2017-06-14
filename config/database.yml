@@ -23,7 +23,12 @@ default: &default
 
 development:
   <<: *default
-  database: doorman_development
+  # database: doorman_development
+
+  host:     192.168.1.71
+  database: doorman_api_production
+  username: chaskas
+  password: chaskoncita
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

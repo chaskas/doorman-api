@@ -52,7 +52,7 @@ class PeopleController < ApplicationController
 
   # GET /people/1
   def show
-    render json: @person
+    render json: @person, include: :visits
   end
 
   # POST /people

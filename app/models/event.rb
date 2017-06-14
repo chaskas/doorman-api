@@ -3,6 +3,8 @@ class Event < ApplicationRecord
   has_many :visits
   has_many :guests
 
+  has_many :people, through: :guests
+
   def as_json(options={})
     options[:methods] = [:total_guests, :total_attendees]
     super
@@ -38,6 +40,34 @@ class Event < ApplicationRecord
     invInvitados    = invitado - invitado_rg
 
     sum = normal + host + residente + embajador + invitado1 + invitado + invHosts + invResidentes + invEmbajadores + invInvitados1 + invInvitados
+
+  end
+
+  def get_attendees_by_hour_and_type(hour, type)
+
+    starts = self.starts
+    if hour < 22
+      starts = self.starts + 1.day
+    end
+
+    Visit.where(event_id: self.id)
+         .where(person_id: Person.select("id").where(mtype: type))
+         .where("created_at >= :begin AND created_at < :end", { begin: (starts).change(hour: hour).beginning_of_hour,  end: (starts).change(hour: hour).end_of_hour })
+         .count
+
+  end
+
+  def get_attendees_rg_by_hour_and_type(hour, type)
+
+    starts = self.starts
+    if hour < 22
+      starts = self.starts + 1.day
+    end
+
+    Visit.where(event_id: self.id)
+         .where(person_id: Person.select("id").where(mtype: type))
+         .where("created_at >= :begin AND created_at < :end", { begin: (starts).change(hour: hour).beginning_of_hour,  end: (starts).change(hour: hour).end_of_hour })
+         .sum(:remaining_guest)
 
   end
 

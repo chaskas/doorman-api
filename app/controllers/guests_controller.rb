@@ -1,5 +1,6 @@
 class GuestsController < ApplicationController
-  before_action :set_guest, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create_by_ruts, :create]
+  before_action :set_guest, only: [:show, :destroy]
 
   def do_visit
 
@@ -48,54 +49,60 @@ class GuestsController < ApplicationController
   # POST /guests
   def create_by_ruts
 
-    ruts = params[:ruts]
-    event = Event.find_by! id: params[:id]
+    if user_signed_in?
 
-    success = false
+      ruts = params[:ruts]
+      event = Event.find_by! id: params[:id]
 
-    status = :ok
+      success = false
 
-    guests = Array.new
+      status = :ok
 
-    ruts.each do |rut|
+      guests = Array.new
 
-      person = 0
+      ruts.each do |rut|
 
-      if rut.dup.to_s.insert(-2, '-').rut_valid?
+        person = 0
 
-        if Person.exists?(rut: rut.to_s[0..-2])
-          person = Person.find_by! rut: rut.to_s[0..-2]
-        else
-          person = Person.new(rut: rut.to_s[0..-2], mtype: 0)
-          person.save
-        end
+        if rut.dup.to_s.insert(-2, '-').rut_valid?
 
-        if Guest.exists?(person_id: person.id, event_id: event.id)
-          success = true
-          status = :accepted
-        else
-          @guest = Guest.new(person_id: person.id, event_id: event.id)
-          if @guest.save
-            success = true
-            status = :created
+          if Person.exists?(rut: rut.to_s[0..-2])
+            person = Person.find_by! rut: rut.to_s[0..-2]
           else
-            success = false
-            status = :unprocessable_entity
+            person = Person.new(rut: rut.to_s[0..-2], mtype: 0)
+            person.save
           end
+
+          if Guest.exists?(person_id: person.id, event_id: event.id)
+            success = true
+            status = :accepted
+          else
+            @guest = Guest.new(person_id: person.id, event_id: event.id, user_id: current_user.id)
+            if @guest.save
+              success = true
+              status = :created
+            else
+              success = false
+              status = :unprocessable_entity
+            end
+          end
+
+        else
+          guests.push(rut.dup.to_s.insert(-2, '-'))
+          success = true
+          status = :partial_content
         end
 
-      else
-        guests.push(rut.dup.to_s.insert(-2, '-'))
-        success = true
-        status = :partial_content
       end
 
-    end
+      if success
+        render json: guests.to_json, status: status
+      else
+        render status: status
+      end
 
-    if success
-      render json: guests.to_json, status: status
     else
-      render status: status
+      render status: :unauthorized
     end
 
   end
@@ -103,12 +110,17 @@ class GuestsController < ApplicationController
 
   # POST /guests
   def create
-    @guest = Guest.new(guest_params)
 
-    if @guest.save
-      render json: @guest, status: :created, location: @guest
+    if user_signed_in?
+      @guest = Guest.new(guest_params)
+
+      if @guest.save
+        render json: @guest, status: :created, location: @guest
+      else
+        render json: @guest.errors, status: :unprocessable_entity
+      end
     else
-      render json: @guest.errors, status: :unprocessable_entity
+      render status: :unauthorized
     end
   end
 
