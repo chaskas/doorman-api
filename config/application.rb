@@ -40,6 +40,7 @@ module Doorman
 
     config.time_zone = 'Santiago'
     config.active_record.default_timezone = :local
+    config.active_record.time_zone_aware_types = [:datetime, :time]
 
   end
 end
