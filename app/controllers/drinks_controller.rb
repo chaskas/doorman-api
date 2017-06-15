@@ -10,9 +10,7 @@ class DrinksController < ApplicationController
 
       @drink = Drink.find_by person_id: person.id, event_id: event.id
 
-      if @drink.remaining > 0
-        @drink.remaining = @drink.remaining - 1
-      end
+      @drink.remaining = @drink.remaining - 1
 
       if @drink.save
         render json: @drink, status: :ok
@@ -21,13 +19,14 @@ class DrinksController < ApplicationController
       end
 
     else
+
       # Crear visita con remaining guest correspondiente (dependiendo de person.mtype)
 
       rg = 0
       if person.mtype == 2 # Host
-        rg = 2
+        rg = 1
       elsif person.mtype == 4 # Embajador
-        rg = 4
+        rg = 3
       else
         rg = 0
       end

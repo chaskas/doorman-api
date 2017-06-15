@@ -235,4 +235,26 @@ class StatisticsController < ApplicationController
 
   end
 
+  # Entrega el número de tragos solicitados por evento y tipo de miembro
+  def get_drinks_by_event_and_mtype
+
+    event = Event.find_by! id: params[:id]
+
+    count_drinks_host               = Drink.where(person_id: Person.select("id").where( mtype: 2), event_id: event.id).count
+    count_drinks_embajador          = Drink.where(person_id: Person.select("id").where( mtype: 4), event_id: event.id).count
+    sum_remaining_drinks_host       = Drink.where(person_id: Person.select("id").where( mtype: 2), event_id: event.id).where('remaining >= ?',0).sum(:remaining)
+    sum_remaining_drinks_embajador  = Drink.where(person_id: Person.select("id").where( mtype: 4), event_id: event.id).where('remaining >= ?',0).sum(:remaining)
+
+    drinks_host        = 2 * count_drinks_host - sum_remaining_drinks_host
+    drinks_embajador   = 4 * count_drinks_embajador - sum_remaining_drinks_embajador
+
+    if drinks_host && drinks_embajador
+      a = {'host': drinks_host, 'embajador': drinks_embajador }
+      render json: a, status: :ok
+    else
+      render status: :not_found
+    end
+
+  end
+
 end

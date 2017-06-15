@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   get 'statistics/2/:id', to: 'statistics#get_attendees_by_type', defaults: { format: :json }
   get 'statistics/3/:id', to: 'statistics#get_attendes_by_hour', defaults: { format: :json }
   get 'statistics/4/:id', to: 'statistics#get_guests_by_user', defaults: { format: :json }
+  get 'statistics/5/:id', to: 'statistics#get_drinks_by_event_and_mtype', defaults: { format: :json }
 
   get '/get_drink', to: 'drinks#get_drink', defaults: { format: :json }
 
