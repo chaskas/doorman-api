@@ -105,7 +105,7 @@ class GuestsController < ApplicationController
             hour_limit = (event.starts + 1.day).change(hour: 1).beginning_of_hour
           end
 
-          @guest = Guest.new(person_id: person.id, event_id: event.id, user_id: 1, ends: hour_limit)
+          @guest = Guest.new(person_id: person.id, event_id: event.id, user_id: current_user.id, ends: hour_limit)
 
           if @guest.save
             success = true
