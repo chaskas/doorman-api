@@ -30,6 +30,8 @@ gem 'omniauth'
 
 gem 'devise_token_auth'
 
+gem 'validates_overlap'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

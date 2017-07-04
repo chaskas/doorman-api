@@ -5,6 +5,8 @@ class Event < ApplicationRecord
 
   has_many :people, through: :guests
 
+  validates :starts, :ends, :overlap => true
+
   def as_json(options={})
     options[:methods] = [:total_guests, :total_attendees]
     super
