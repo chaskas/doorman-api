@@ -1,18 +1,14 @@
 Rails.application.routes.draw do
+
   mount_devise_token_auth_for 'User', at: 'auth'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
   resources :people
   resources :events
   resources :visits
   resources :guests
 
-  get '/people/m/host', to: 'people#host', defaults: { format: :json }
-  get '/people/m/residente', to: 'people#residente', defaults: { format: :json }
-  get '/people/m/embajador', to: 'people#embajador', defaults: { format: :json }
-  get '/people/m/invitado', to: 'people#invitado', defaults: { format: :json }
-  get '/people/m/invitado1', to: 'people#invitado1', defaults: { format: :json }
-  get '/people/m/normal', to: 'people#normal', defaults: { format: :json }
+  get '/people/:type/:page', to: 'people#member_by_type', defaults: { format: :json }
+  get '/people/m/normal/:page', to: 'people#normal', defaults: { format: :json }
 
   get '/visit', to: 'visits#do_visit', defaults: { format: :json }
   get '/guest/in', to: 'guests#do_visit', defaults: { format: :json }
@@ -35,5 +31,10 @@ Rails.application.routes.draw do
   patch '/profile', to: 'profiles#update', defaults: { format: :json }
   delete '/profile', to: 'profiles#destroy', defaults: { format: :json }
   post '/profile/avatar', to: 'profiles#update_avatar', defaults: { format: :json }
+
+  get 'get_people_names', to: 'utils#get_people_names', defaults: { format: :json }
+
+  get 'users', to: 'users#index', defaults: { format: :json }
+  get 'users/:id', to: 'users#show', defaults: { format: :json }
 
 end

@@ -8,46 +8,23 @@ class PeopleController < ApplicationController
     render json: @people
   end
 
-  # GET /people/m/host
-  def host
-    @people = Person.where(mtype: 2).order('last_seen IS NULL, last_seen DESC')
+  # GET /people/type/page
+  def member_by_type
+    mtype = params[:type]
+    people = Person.where(mtype: mtype).order('last_seen IS NULL, last_seen DESC').sort_by(&:total_visits).reverse
 
-    render json: @people
-  end
+    @people_sorted = Kaminari.paginate_array(people).page(params[:page]).per(20)
 
-  # GET /people/m/residente
-  def residente
-    @people = Person.where(mtype: 1).order('last_seen IS NULL, last_seen DESC')
-
-    render json: @people
-  end
-
-  # GET /people/m/embajador
-  def embajador
-    @people = Person.where(mtype: 4).order('last_seen IS NULL, last_seen DESC')
-
-    render json: @people
-  end
-
-  # GET /people/m/invitado
-  def invitado
-    @people = Person.where(mtype: 3).order('last_seen IS NULL, last_seen DESC')
-
-    render json: @people
-  end
-
-  # GET /people/m/invitado1
-  def invitado1
-    @people = Person.where(mtype: 5).order('last_seen IS NULL, last_seen DESC')
-
-    render json: @people
+    render json: { people: @people_sorted, meta: { pages: @people_sorted.total_pages }, mtype: mtype }
   end
 
   # GET /people/m/normal
   def normal
-    @people = Person.where(mtype: 0).order('last_seen IS NULL, last_seen DESC')
+    people = Person.where(mtype: 0).order('last_seen IS NULL, last_seen DESC').sort_by(&:total_visits).reverse
 
-    render json: @people
+    @people_sorted = Kaminari.paginate_array(people).page(params[:page]).per(20)
+
+    render json: { people: @people_sorted, meta: { total: @people_sorted.total_pages } }
   end
 
   # GET /people/1
