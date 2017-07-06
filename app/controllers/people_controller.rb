@@ -15,7 +15,17 @@ class PeopleController < ApplicationController
 
     @people_sorted = Kaminari.paginate_array(people).page(params[:page]).per(20)
 
-    render json: { people: @people_sorted, meta: { pages: @people_sorted.total_pages }, mtype: mtype }
+    render json: {
+        people: @people_sorted,
+        meta: {
+          total_pages: @people_sorted.total_pages,
+          current_page: @people_sorted.current_page,
+          first_page: @people_sorted.first_page?,
+          last_page: @people_sorted.last_page?,
+          prev_page: @people_sorted.prev_page,
+          next_page: @people_sorted.next_page
+        },
+        mtype: mtype }
   end
 
   # GET /people/m/normal
