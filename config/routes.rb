@@ -37,4 +37,6 @@ Rails.application.routes.draw do
   get 'users', to: 'users#index', defaults: { format: :json }
   get 'users/:id', to: 'users#show', defaults: { format: :json }
 
+  get '/checkin', to: 'checkins#check_in', defaults: { format: :json }
+
 end
