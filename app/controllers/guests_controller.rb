@@ -89,18 +89,61 @@ class GuestsController < ApplicationController
         else
 
           hour_limit = (event.starts + 1.day).change(hour: 1).beginning_of_hour
+
+          # 00:00
           if params[:ends].to_i == 0
             hour_limit = (event.starts + 1.day).change(hour: 0).beginning_of_hour
-          elsif params[:ends].to_i == 1
+          elsif params[:ends].to_i == 15
+            hour_limit = (event.starts + 1.day).change(hour: 0, min: 15).beginning_of_minute
+          elsif params[:ends].to_i == 30
+            hour_limit = (event.starts + 1.day).change(hour: 0, min: 30).beginning_of_minute
+          elsif params[:ends].to_i == 45
+            hour_limit = (event.starts + 1.day).change(hour: 0, min: 45).beginning_of_minute
+
+          # 01:00
+          elsif params[:ends].to_i == 60
             hour_limit = (event.starts + 1.day).change(hour: 1).beginning_of_hour
-          elsif params[:ends].to_i == 2
+          elsif params[:ends].to_i == 75
+            hour_limit = (event.starts + 1.day).change(hour: 1, min: 15).beginning_of_minute
+          elsif params[:ends].to_i == 90
+            hour_limit = (event.starts + 1.day).change(hour: 1, min: 30).beginning_of_minute
+          elsif params[:ends].to_i == 105
+            hour_limit = (event.starts + 1.day).change(hour: 1, min: 45).beginning_of_minute
+
+          # 02:00
+          elsif params[:ends].to_i == 120
             hour_limit = (event.starts + 1.day).change(hour: 2).beginning_of_hour
-          elsif params[:ends].to_i == 3
+          elsif params[:ends].to_i == 135
+            hour_limit = (event.starts + 1.day).change(hour: 2, min: 15).beginning_of_minute
+          elsif params[:ends].to_i == 150
+            hour_limit = (event.starts + 1.day).change(hour: 2, min: 30).beginning_of_minute
+          elsif params[:ends].to_i == 165
+            hour_limit = (event.starts + 1.day).change(hour: 2, min: 45).beginning_of_minute
+
+          # 03:00
+          elsif params[:ends].to_i == 180
             hour_limit = (event.starts + 1.day).change(hour: 3).beginning_of_hour
-          elsif params[:ends].to_i == 4
+          elsif params[:ends].to_i == 195
+            hour_limit = (event.starts + 1.day).change(hour: 3, min: 15).beginning_of_minute
+          elsif params[:ends].to_i == 210
+            hour_limit = (event.starts + 1.day).change(hour: 3, min: 30).beginning_of_minute
+          elsif params[:ends].to_i == 225
+            hour_limit = (event.starts + 1.day).change(hour: 3, min: 45).beginning_of_minute
+
+          # 04:00
+          elsif params[:ends].to_i == 240
             hour_limit = (event.starts + 1.day).change(hour: 4).beginning_of_hour
-          elsif params[:ends].to_i == 5
+          elsif params[:ends].to_i == 255
+            hour_limit = (event.starts + 1.day).change(hour: 4, min: 15).beginning_of_minute
+          elsif params[:ends].to_i == 270
+            hour_limit = (event.starts + 1.day).change(hour: 4, min: 30).beginning_of_minute
+          elsif params[:ends].to_i == 285
+            hour_limit = (event.starts + 1.day).change(hour: 4, min: 45).beginning_of_minute
+
+          # 05:00
+          elsif params[:ends].to_i == 300
             hour_limit = (event.starts + 1.day).change(hour: 5).beginning_of_hour
+
           else
             hour_limit = (event.starts + 1.day).change(hour: 1).beginning_of_hour
           end
