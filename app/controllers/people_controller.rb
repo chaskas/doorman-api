@@ -8,33 +8,18 @@ class PeopleController < ApplicationController
     render json: @people
   end
 
-  # GET /people/type/page
+  # GET /people/type
   def member_by_type
+
     mtype = params[:type]
-    people = Person.where(mtype: mtype).order('last_seen IS NULL, last_seen DESC').sort_by(&:total_visits).reverse
 
-    @people_sorted = Kaminari.paginate_array(people).page(params[:page]).per(20)
+    if mtype.to_i == 0
+      @people = Person.where(mtype: mtype).where('last_seen is not null').order('nvisits DESC, last_seen DESC')
+    else
+      @people = Person.where(mtype: mtype).order('last_seen IS NULL, nvisits DESC, last_seen DESC')
+    end
 
-    render json: {
-        people: @people_sorted,
-        meta: {
-          total_pages: @people_sorted.total_pages,
-          current_page: @people_sorted.current_page,
-          first_page: @people_sorted.first_page?,
-          last_page: @people_sorted.last_page?,
-          prev_page: @people_sorted.prev_page,
-          next_page: @people_sorted.next_page
-        },
-        mtype: mtype }
-  end
-
-  # GET /people/m/normal
-  def normal
-    people = Person.where(mtype: 0).order('last_seen IS NULL, last_seen DESC').sort_by(&:total_visits).reverse
-
-    @people_sorted = Kaminari.paginate_array(people).page(params[:page]).per(20)
-
-    render json: { people: @people_sorted, meta: { total: @people_sorted.total_pages } }
+    render json: @people, status: :ok
   end
 
   # GET /people/1

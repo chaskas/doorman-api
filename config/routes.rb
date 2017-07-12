@@ -2,13 +2,13 @@ Rails.application.routes.draw do
 
   mount_devise_token_auth_for 'User', at: 'auth'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  get '/people/m/:type', to: 'people#member_by_type', defaults: { format: :json }
+
   resources :people
   resources :events
   resources :visits
   resources :guests
-
-  get '/people/:type/:page', to: 'people#member_by_type', defaults: { format: :json }
-  get '/people/m/normal/:page', to: 'people#normal', defaults: { format: :json }
 
   get '/visit', to: 'visits#do_visit', defaults: { format: :json }
   get '/guest/in', to: 'guests#do_visit', defaults: { format: :json }
@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   post '/profile/avatar', to: 'profiles#update_avatar', defaults: { format: :json }
 
   get 'get_people_names', to: 'utils#get_people_names', defaults: { format: :json }
+  get 'update_visits', to: 'utils#update_visits', defaults: { format: :json }
 
   get 'users', to: 'users#index', defaults: { format: :json }
   get 'users/:id', to: 'users#show', defaults: { format: :json }
