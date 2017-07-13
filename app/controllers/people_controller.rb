@@ -14,12 +14,12 @@ class PeopleController < ApplicationController
     mtype = params[:type]
 
     if mtype.to_i == 0
-      @people = Person.where(mtype: mtype).where('last_seen is not null').order('nvisits DESC, last_seen DESC')
+      @people = Person.where(mtype: mtype).where('last_seen is not null').order('nvisits DESC, last_seen DESC').limit(500)
     else
       @people = Person.where(mtype: mtype).order('last_seen IS NULL, nvisits DESC, last_seen DESC')
     end
 
-    render json: @people, status: :ok
+    render json: @people.to_json({ :methods => :rank }), status: :ok
   end
 
   # GET /people/1
