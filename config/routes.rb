@@ -40,4 +40,6 @@ Rails.application.routes.draw do
 
   get '/checkin', to: 'checkins#check_in', defaults: { format: :json }
 
+  get 'doctor', to: 'utils#get_doctor', defaults: { format: :json }
+
 end
